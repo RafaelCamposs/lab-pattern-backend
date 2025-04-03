@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/jin_backend
+    url: jdbc:mysql://localhost:3306/trophy_lab_backend
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: secret
@@ -16,7 +16,7 @@ spring:
     enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migrations
-    schemas: jin_backend
+    schemas: trophy_lab_backend
     validate-on-migrate: true
 
 server:

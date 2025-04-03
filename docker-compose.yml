@@ -1,10 +1,10 @@
 services:
   mysql:
     image: mysql:8.0
-    container_name: jin-backend-mysql
+    container_name: trophy_lab_backend-mysql
     environment:
       MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: jin_backend
+      MYSQL_DATABASE: trophy_lab_backend
     ports:
       - "3306:3306"
     volumes:
