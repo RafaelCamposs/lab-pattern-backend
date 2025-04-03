@@ -1,9 +1,7 @@
 package com.example.application.user.service
 
-import com.example.application.user.model.UserModel
 import com.example.application.user.repository.UserRepository
 import com.example.domain.user.entity.User
-import com.example.domain.user.entity.dto.UpdateUserDto
 import com.example.domain.user.gateway.*
 import org.springframework.stereotype.Component
 
