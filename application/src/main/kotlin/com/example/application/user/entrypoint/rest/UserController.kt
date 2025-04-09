@@ -1,7 +1,9 @@
 package com.example.application.user.entrypoint.rest
 
+import com.example.application.tournament.entrypoint.rest.dto.response.TournamentResponseDto
 import com.example.application.user.entrypoint.rest.dto.request.StoreUserRequestDto
 import com.example.application.user.entrypoint.rest.dto.request.UpdateUserRequestDto
+import com.example.domain.tournament.entity.Tournament
 import com.example.domain.user.entity.User
 import com.example.domain.user.usecase.*
 import org.springframework.http.HttpStatus
@@ -15,7 +17,8 @@ class UserController(
     private val getAllUsersUseCase: GetAllUsersUseCase,
     private val getUserByIdUseCase: GetUserByIdUseCase,
     private val updateUserUseCase: UpdateUserUseCase,
-    private val deleteUserUseCase: DeleteUserUseCase
+    private val deleteUserUseCase: DeleteUserUseCase,
+    private val getUserTournamentsUseCase: GetUserTournamentsUseCase
 ) {
 
     @GetMapping
@@ -52,5 +55,15 @@ class UserController(
     fun deleteUser(@PathVariable id: Long): ResponseEntity<Unit> {
         deleteUserUseCase.execute(id)
         return ResponseEntity.noContent().build()
+    }
+
+    @GetMapping("/{id}/tournaments")
+    fun getUserTournaments(@PathVariable id: Long): ResponseEntity<List<TournamentResponseDto>> {
+        return getUserTournamentsUseCase.execute(id).fold(
+            onSuccess = { ResponseEntity.ok(it.map {
+                tournament: Tournament ->  TournamentResponseDto.fromDomain(tournament)
+            }) },
+            onFailure = { ResponseEntity.notFound().build() }
+        )
     }
 }
