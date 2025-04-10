@@ -13,7 +13,7 @@ class DeleteTournamentUseCase (
         val tournament = getTournamentByIdGateway.execute(tournamentId).getOrThrow()
 
         if (tournament.isDeletable()) {
-            return Result.failure(IllegalStateException("Tournament already deleted"))
+            return Result.failure(IllegalStateException("Tournament cant be deleted"))
         }
 
         return deleteTournamentGateway.execute(tournamentId)
