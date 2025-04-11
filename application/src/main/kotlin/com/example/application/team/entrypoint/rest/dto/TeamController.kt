@@ -40,13 +40,9 @@ class TeamController(
     fun getTeam(@PathVariable id: Long): ResponseEntity<TeamResponseDto> {
         return getTeamByIdUseCase.execute(id).fold(
             onSuccess = { team ->
-                if (team != null) {
-                    ResponseEntity.ok(TeamResponseDto.fromDomain(team))
-                } else {
-                    ResponseEntity.notFound().build()
-                }
+                ResponseEntity.ok(TeamResponseDto.fromDomain(team))
             },
-            onFailure = { ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build() }
+            onFailure = { ResponseEntity.status(HttpStatus.NOT_FOUND).build() }
         )
     }
 

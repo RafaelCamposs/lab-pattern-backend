@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 class GetTeamByIdService(
     private val teamRepository: TeamRepository,
 ): GetTeamByIdGateway {
-    override fun execute(id: Long): Result<Team?> {
+    override fun execute(id: Long): Result<Team> {
         return runCatching {
             teamRepository.findById(id).orElseThrow {
                 NoSuchElementException("Team not found")

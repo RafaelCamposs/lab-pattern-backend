@@ -6,7 +6,7 @@ import jakarta.inject.Named
 
 @Named
 class GetTeamByIdUseCase(private val getTeamByIdGateway: GetTeamByIdGateway) {
-    fun execute(id: Long): Result<Team?> {
+    fun execute(id: Long): Result<Team> {
         return getTeamByIdGateway.execute(id)
     }
 }
