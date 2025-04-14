@@ -1,0 +1,7 @@
+CREATE TABLE design_pattern (
+  id BINARY(16) PRIMARY KEY DEFAULT (UUID()),
+  name VARCHAR(255) NOT NULL,
+  category VARCHAR(50) NOT NULL,
+  description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
