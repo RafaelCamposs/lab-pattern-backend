@@ -4,13 +4,15 @@ import com.example.domain.user.entity.User
 import jakarta.persistence.*
 import org.hibernate.annotations.Where
 import java.time.LocalDateTime
+import java.util.*
 
 @Entity(name = "user")
 @Where(clause = "deleted_at is null")
 data class UserModel(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    @GeneratedValue(generator = "UUID")
+    @Column(updatable = false, nullable = false)
+    val id: UUID? = null,
 
     val name: String,
 

@@ -7,6 +7,7 @@ import com.example.domain.user.usecase.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 @RequestMapping("/v1/users")
@@ -25,7 +26,7 @@ class UserController(
     }
 
     @GetMapping("/{id}")
-    fun getUserById(@PathVariable id: Long): ResponseEntity<User> {
+    fun getUserById(@PathVariable id: UUID): ResponseEntity<User> {
         return getUserByIdUseCase.execute(id).fold(
             onSuccess = { ResponseEntity.ok(it) },
             onFailure = { ResponseEntity.notFound().build() }
@@ -40,7 +41,7 @@ class UserController(
     }
 
     @PutMapping("/{id}")
-    fun updateUser(@PathVariable id: Long, @RequestBody updateUserRequestDto: UpdateUserRequestDto): ResponseEntity<User> {
+    fun updateUser(@PathVariable id: UUID, @RequestBody updateUserRequestDto: UpdateUserRequestDto): ResponseEntity<User> {
         val updateUserDto = updateUserRequestDto.toUpdateUserDto(id)
         return updateUserUseCase.execute(updateUserDto).fold(
             onSuccess = { ResponseEntity.ok(it) },
@@ -49,7 +50,7 @@ class UserController(
     }
 
     @DeleteMapping("/{id}")
-    fun deleteUser(@PathVariable id: Long): ResponseEntity<Unit> {
+    fun deleteUser(@PathVariable id: UUID): ResponseEntity<Unit> {
         deleteUserUseCase.execute(id)
         return ResponseEntity.noContent().build()
     }
