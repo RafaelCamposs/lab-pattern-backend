@@ -19,8 +19,6 @@ data class UserModel(
 
     val password: String,
 
-    val role: String = "COORDINATOR",
-
     val deletedAt: LocalDateTime? = null,
 ) {
     fun toDomain() = User(

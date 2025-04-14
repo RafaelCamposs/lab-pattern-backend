@@ -1,3 +1,3 @@
-### Trophy Lab Backend
+### Daily Pattern Backend
 
 Work in progress

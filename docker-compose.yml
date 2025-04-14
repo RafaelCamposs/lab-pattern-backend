@@ -1,10 +1,10 @@
 services:
   mysql:
     image: mysql:8.0
-    container_name: trophy_lab_backend-mysql
+    container_name: daily_pattern_backend-mysql
     environment:
       MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: trophy_lab_backend
+      MYSQL_DATABASE: daily-pattern-backend
     ports:
       - "3306:3306"
     volumes:
