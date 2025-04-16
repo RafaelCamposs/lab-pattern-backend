@@ -20,12 +20,12 @@ class GenerateChallengeService (
         val patternResult = getRandomPatternUseCase.execute().getOrThrow()
         val themeResult = getRandomThemeUseCase.execute().getOrThrow()
 
-        val response = getOpenAiQuestionService.execute(patternResult, themeResult).getOrThrow()
+        val openApiChallengeResponseDto = getOpenAiQuestionService.execute(patternResult, themeResult).getOrThrow()
 
         val storeChallengeDto = StoreChallengeDto(
             expectedPatternId = patternResult.id,
-            title = "",
-            description = "",
+            title = openApiChallengeResponseDto.title,
+            description = openApiChallengeResponseDto.description,
         )
 
         storeChallengeUseCase.execute(storeChallengeDto).onFailure {

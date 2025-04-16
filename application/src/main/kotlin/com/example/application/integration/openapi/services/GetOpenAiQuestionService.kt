@@ -21,7 +21,7 @@ class GetOpenAiQuestionService(
     private val objectMapper: ObjectMapper
 ) {
 
-    fun execute(pattern: DesignPattern, theme: String): Result<Map<String, String>> {
+    fun execute(pattern: DesignPattern, theme: String): Result<OpenApiChallengeResponseDto> {
         val prompt = """
             You are a design pattern professor tasked with guiding students on identifying real-world
              scenarios
@@ -72,13 +72,8 @@ class GetOpenAiQuestionService(
 
             val openApiResponse = client.chat().completions().create(params)
 
-            val jsonResponse =  openApiResponse.choices()[0].message().content().toString()
-            val openApiChallengeResponseDto = objectMapper.readValue(jsonResponse, OpenApiChallengeResponseDto::class.java)
-
-            mapOf(
-                "description" to openApiChallengeResponseDto.description,
-                "title" to openApiChallengeResponseDto.title
-            )
+            val jsonResponse =  openApiResponse.choices()[0].message().content().get()
+            objectMapper.readValue(jsonResponse, OpenApiChallengeResponseDto::class.java)
         }
     }
 }
