@@ -22,6 +22,11 @@ spring:
 server:
   port: 8080
 
+open-ai:
+  api-key: ${OPENAI_API_KEY}
+  project-id: ${OPENAI_PROJECT_ID}
+  organization-id: ${OPENAI_ORG_ID}
+
 logging:
   level:
     org.hibernate.SQL: DEBUG

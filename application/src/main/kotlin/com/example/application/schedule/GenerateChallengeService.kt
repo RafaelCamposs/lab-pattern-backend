@@ -1,5 +1,6 @@
 package com.example.application.schedule
 
+import com.example.application.integration.openapi.services.GetOpenAiQuestionService
 import com.example.domain.challenge.entity.dto.StoreChallengeDto
 import com.example.domain.challenge.usecase.StoreChallengeUseCase
 import com.example.domain.pattern.usecase.GetRandomPatternUseCase
@@ -12,17 +13,19 @@ class GenerateChallengeService (
     private val getRandomPatternUseCase: GetRandomPatternUseCase,
     private val getRandomThemeUseCase: GetRandomThemeUseCase,
     private val storeChallengeUseCase: StoreChallengeUseCase,
+    private val getOpenAiQuestionService: GetOpenAiQuestionService,
 ) {
     @Scheduled(fixedRate = 60000)
     fun execute() {
-
         val patternResult = getRandomPatternUseCase.execute().getOrThrow()
         val themeResult = getRandomThemeUseCase.execute().getOrThrow()
 
+        val response = getOpenAiQuestionService.execute(patternResult, themeResult).getOrThrow()
+
         val storeChallengeDto = StoreChallengeDto(
             expectedPatternId = patternResult.id,
-            title = "${themeResult} ${patternResult.name}",
-            description = "${themeResult} ${patternResult.description}",
+            title = "",
+            description = "",
         )
 
         storeChallengeUseCase.execute(storeChallengeDto).onFailure {
