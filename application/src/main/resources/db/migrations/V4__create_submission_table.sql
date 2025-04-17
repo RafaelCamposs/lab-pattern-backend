@@ -3,7 +3,7 @@ CREATE TABLE submission (
   user_id BINARY(16) REFERENCES user(id),
   challenge_id BINARY(16) REFERENCES challenge(id),
   code TEXT NOT NULL,
-  language VARCHAR(50) DEFAULT 'kotlin',
+  language VARCHAR(50),
   submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  status ENUM('pending', 'processing', 'completed', 'error') DEFAULT 'pending'
+  status VARCHAR(25)
 );
