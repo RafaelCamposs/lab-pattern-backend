@@ -5,21 +5,14 @@ import com.example.domain.challenge.entity.dto.AiQuestionDto
 import com.example.domain.challenge.gateway.GetAiQuestionGateway
 import com.example.domain.pattern.entity.DesignPattern
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.openai.client.okhttp.OpenAIOkHttpClient
-
+import com.openai.client.OpenAIClient
 import com.openai.models.ChatModel
 import com.openai.models.chat.completions.ChatCompletionCreateParams
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
 class GetOpenAiQuestionService(
-    @Value("\${open-ai.api-key}")
-    private val openAiApiKey: String,
-    @Value("\${open-ai.organization-id}")
-    private val openAiOrganizationId: String,
-    @Value("\${open-ai.project-id}")
-    private val openAiProjectId: String,
+    private val openAiClient: OpenAIClient,
     private val objectMapper: ObjectMapper
 ) : GetAiQuestionGateway {
 
@@ -58,12 +51,6 @@ class GetOpenAiQuestionService(
         """.trimIndent()
 
         return runCatching {
-            val client = OpenAIOkHttpClient.builder()
-                .apiKey(openAiApiKey)
-                .organization(openAiOrganizationId)
-                .project(openAiProjectId)
-                .build()
-
             val params = ChatCompletionCreateParams
                 .builder()
                 .model(ChatModel.GPT_4O_MINI)
@@ -72,7 +59,7 @@ class GetOpenAiQuestionService(
                 )
                 .build()
 
-            val openApiResponse = client.chat().completions().create(params)
+            val openApiResponse = openAiClient.chat().completions().create(params)
 
             val jsonResponse =  openApiResponse.choices()[0].message().content().get()
             objectMapper.readValue(jsonResponse, OpenApiChallengeResponseDto::class.java).toDomain()

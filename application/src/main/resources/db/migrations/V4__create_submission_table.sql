@@ -4,6 +4,7 @@ CREATE TABLE submission (
   challenge_id BINARY(16) REFERENCES challenge(id),
   code TEXT NOT NULL,
   language VARCHAR(50),
+  pattern_id BINARY(16) REFERENCES design_pattern(id),
   submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   status VARCHAR(25)
 );

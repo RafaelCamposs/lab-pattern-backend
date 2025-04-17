@@ -21,6 +21,8 @@ data class SubmissionModel(
 
     val challengeId: UUID,
 
+    val patternId: UUID,
+
     val code: String,
 
     val language: String,
@@ -35,7 +37,8 @@ data class SubmissionModel(
             userId = storeSubmissionDto.userId,
             challengeId = storeSubmissionDto.challengeId,
             code = storeSubmissionDto.code,
-            language = storeSubmissionDto.language
+            language = storeSubmissionDto.language,
+            patternId = storeSubmissionDto.patternId,
         )
     }
 
@@ -46,6 +49,7 @@ data class SubmissionModel(
         code = code,
         language = language,
         submittedAt = submittedAt,
-        status = status
+        status = status,
+        patternId = patternId,
     )
 }

@@ -9,6 +9,7 @@ data class SubmissionResponseDto(
     val id: UUID,
     val userId: UUID,
     val challengeId: UUID,
+    val patternId: UUID,
     val code: String,
     val language: String,
     val submittedAt: LocalDateTime,
@@ -22,7 +23,8 @@ data class SubmissionResponseDto(
             code = submission.code,
             language = submission.language,
             submittedAt = submission.submittedAt,
-            status = submission.status
+            status = submission.status,
+            patternId = submission.patternId,
         )
     }
 }

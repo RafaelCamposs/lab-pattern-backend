@@ -1,6 +1,7 @@
 package com.example.domain.submission.usecase
 
 import com.example.domain.challenge.gateway.GetChallengeByIdGateway
+import com.example.domain.evaluation.usecase.StoreEvaluationUseCase
 import com.example.domain.pattern.gateway.GetPatternByIdGateway
 import com.example.domain.submission.entity.Submission
 import com.example.domain.submission.entity.dto.StoreSubmissionDto
@@ -14,15 +15,27 @@ class StoreSubmissionUseCase (
     private val getChallengeByIdGateway: GetChallengeByIdGateway,
     private val getUserByIdGateway: GetUserByIdGateway,
     private val getPatternByIdGateway: GetPatternByIdGateway,
+    private val storeEvaluationUseCase: StoreEvaluationUseCase,
 ) {
     fun execute(storeSubmissionDto: StoreSubmissionDto): Result<Submission> {
-        validateReferences(storeSubmissionDto)
-        return storeSubmissionGateway.execute(storeSubmissionDto)
+        val challenge = getChallengeByIdGateway.execute(storeSubmissionDto.challengeId).getOrThrow()
+        getUserByIdGateway.execute(storeSubmissionDto.userId).getOrThrow()
+        val pattern = getPatternByIdGateway.execute(storeSubmissionDto.patternId).getOrThrow()
+        val submission = storeSubmissionGateway.execute(storeSubmissionDto).getOrThrow()
+        val evaluation = storeEvaluationUseCase.execute(
+            submission = submission,
+            challenge = challenge,
+            pattern = pattern,
+        ).getOrThrow()
+
+        return Result.success(
+            submission.copy(
+                evaluation = evaluation,
+            )
+        )
     }
 
     private fun validateReferences(storeSubmissionDto: StoreSubmissionDto) {
-        getChallengeByIdGateway.execute(storeSubmissionDto.challengeId).getOrThrow()
-        getUserByIdGateway.execute(storeSubmissionDto.userId).getOrThrow()
-        getPatternByIdGateway.execute(storeSubmissionDto.patternId).getOrThrow()
+
     }
 }
