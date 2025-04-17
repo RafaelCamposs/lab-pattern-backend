@@ -1,6 +1,8 @@
 package com.example.application.integration.openapi.services
 
 import com.example.application.integration.openapi.dto.response.OpenApiChallengeResponseDto
+import com.example.domain.challenge.entity.dto.AiQuestionDto
+import com.example.domain.challenge.gateway.GetAiQuestionGateway
 import com.example.domain.pattern.entity.DesignPattern
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.openai.client.okhttp.OpenAIOkHttpClient
@@ -19,9 +21,9 @@ class GetOpenAiQuestionService(
     @Value("\${open-ai.project-id}")
     private val openAiProjectId: String,
     private val objectMapper: ObjectMapper
-) {
+) : GetAiQuestionGateway {
 
-    fun execute(pattern: DesignPattern, theme: String): Result<OpenApiChallengeResponseDto> {
+    override fun execute(pattern: DesignPattern, theme: String): Result<AiQuestionDto> {
         val prompt = """
             You are a design pattern professor tasked with guiding students on identifying real-world
              scenarios
@@ -73,7 +75,7 @@ class GetOpenAiQuestionService(
             val openApiResponse = client.chat().completions().create(params)
 
             val jsonResponse =  openApiResponse.choices()[0].message().content().get()
-            objectMapper.readValue(jsonResponse, OpenApiChallengeResponseDto::class.java)
+            objectMapper.readValue(jsonResponse, OpenApiChallengeResponseDto::class.java).toDomain()
         }
     }
 }
