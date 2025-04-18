@@ -2,7 +2,6 @@ package com.example.application.submission.model
 
 import com.example.domain.submission.entity.Submission
 import com.example.domain.submission.entity.dto.StoreSubmissionDto
-import com.example.domain.submission.entity.enum.SubmissionStatusEnum
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -28,9 +27,6 @@ data class SubmissionModel(
     val language: String,
 
     val submittedAt: LocalDateTime = LocalDateTime.now(),
-
-    @Column(nullable = false, columnDefinition = "varchar(25)")
-    val status: SubmissionStatusEnum = SubmissionStatusEnum.PENDING,
 ) {
     companion object {
         fun fromStoreSubmissionDto(storeSubmissionDto: StoreSubmissionDto) = SubmissionModel(
@@ -49,7 +45,6 @@ data class SubmissionModel(
         code = code,
         language = language,
         submittedAt = submittedAt,
-        status = status,
         patternId = patternId,
     )
 }

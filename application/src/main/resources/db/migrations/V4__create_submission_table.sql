@@ -5,6 +5,5 @@ CREATE TABLE submission (
   code TEXT NOT NULL,
   language VARCHAR(50),
   pattern_id BINARY(16) REFERENCES design_pattern(id),
-  submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  status VARCHAR(25)
+  submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
