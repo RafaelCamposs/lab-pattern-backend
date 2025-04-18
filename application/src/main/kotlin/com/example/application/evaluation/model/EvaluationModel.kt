@@ -22,8 +22,6 @@ data class EvaluationModel(
 
     val submissionId: UUID,
 
-    val detectedPatternId: UUID,
-
     val score: Int,
 
     @Convert(converter = FeedbackStringConverter::class)
@@ -35,7 +33,6 @@ data class EvaluationModel(
     companion object {
         fun fromStoreEvaluationDto(storeEvaluationDto: StoreEvaluationDto) = EvaluationModel(
             submissionId = storeEvaluationDto.submissionId,
-            detectedPatternId = storeEvaluationDto.patternId,
             score = storeEvaluationDto.aiEvaluationDto.score,
             feedback = storeEvaluationDto.aiEvaluationDto.getFeedback()
         )
@@ -44,7 +41,6 @@ data class EvaluationModel(
     fun toDomain() = Evaluation(
         id = id,
         submissionId = submissionId,
-        detectedPatternId = detectedPatternId,
         score = score,
         feedback = feedback,
         evaluatedAt = evaluatedAt

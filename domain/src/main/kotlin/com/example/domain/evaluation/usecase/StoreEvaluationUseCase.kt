@@ -27,7 +27,6 @@ class StoreEvaluationUseCase (
 
         val storeEvaluationDto = StoreEvaluationDto(
             submissionId = submission.id!!,
-            patternId = submission.patternId,
             userId = submission.userId,
             aiEvaluationDto = aiEvaluation,
         )
