@@ -39,18 +39,19 @@ class GetOpenAiSubmissionEvaluationService (
             2. Code quality and best practices 
             3. Solution effectiveness for the given problem
             
-            Provide a detailed evaluation in the following JSON format: 
-            { "score": [A number between 0-100],
-             "feedback": [Array of general feedback points],
-              "strengths": [Array of specific strengths],
-               "improvements": [Array of specific areas for improvement] 
-             }                  
+            Provide a detailed evaluation in the following JSON structure without the json markdown indicator: 
+            { 
+                "score": [A number between 0-100],
+                "feedback": [Array of general feedback points],
+                "strengths": [Array of specific strengths],
+                "improvements": [Array of specific areas for improvement] 
+            }                  
         """
 
         return runCatching {
             val params = ChatCompletionCreateParams
                 .builder()
-                .model(ChatModel.GPT_4)
+                .model(ChatModel.GPT_4O_MINI)
                 .addUserMessage(
                     prompt
                 )

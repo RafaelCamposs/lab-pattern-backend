@@ -7,7 +7,7 @@ data class OpenAiEvaluationResponseDto(
     @JsonProperty(value = "score")
     val score: Int,
     @JsonProperty(value = "feedback")
-    val feedback: String,
+    val feedback: List<String>,
     @JsonProperty(value = "strengths")
     val strengths: List<String>,
     @JsonProperty(value = "improvements")

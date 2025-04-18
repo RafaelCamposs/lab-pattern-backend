@@ -34,8 +34,4 @@ class StoreSubmissionUseCase (
             )
         )
     }
-
-    private fun validateReferences(storeSubmissionDto: StoreSubmissionDto) {
-
-    }
 }

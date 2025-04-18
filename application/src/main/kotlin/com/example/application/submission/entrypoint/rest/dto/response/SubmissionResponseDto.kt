@@ -1,5 +1,6 @@
 package com.example.application.submission.entrypoint.rest.dto.response
 
+import com.example.application.evaluation.entrypoint.rest.dto.response.EvaluationResponseDto
 import com.example.domain.submission.entity.Submission
 import com.example.domain.submission.entity.enum.SubmissionStatusEnum
 import java.time.LocalDateTime
@@ -14,6 +15,7 @@ data class SubmissionResponseDto(
     val language: String,
     val submittedAt: LocalDateTime,
     val status: SubmissionStatusEnum,
+    val evaluation: EvaluationResponseDto
 ) {
     companion object {
         fun fromDomain(submission: Submission) = SubmissionResponseDto(
@@ -25,6 +27,7 @@ data class SubmissionResponseDto(
             submittedAt = submission.submittedAt,
             status = submission.status,
             patternId = submission.patternId,
+            evaluation = EvaluationResponseDto.fromDomain(submission.evaluation!!)
         )
     }
 }

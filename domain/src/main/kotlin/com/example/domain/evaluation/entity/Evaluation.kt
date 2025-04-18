@@ -8,6 +8,6 @@ data class Evaluation (
     val submissionId: UUID,
     val detectedPatternId: UUID,
     val score: Int,
-    val feedback: String,
+    val feedback: Feedback,
     val evaluatedAt: LocalDateTime
 )
