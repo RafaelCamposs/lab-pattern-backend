@@ -1,6 +1,7 @@
 package com.example.application.user.entrypoint.rest
 
 import com.example.application.challenge.entrypoint.rest.dto.response.ChallengeResponseDto
+import com.example.application.submission.entrypoint.rest.dto.response.SubmissionResponseDto
 import com.example.application.user.entrypoint.rest.dto.request.StoreUserRequestDto
 import com.example.application.user.entrypoint.rest.dto.request.UpdateUserRequestDto
 import com.example.domain.user.entity.User
@@ -18,7 +19,8 @@ class UserController(
     private val getUserByIdUseCase: GetUserByIdUseCase,
     private val updateUserUseCase: UpdateUserUseCase,
     private val deleteUserUseCase: DeleteUserUseCase,
-    private val getUserSolvedChallengesUseCase: GetUserSolvedChallengesUseCase
+    private val getUserSolvedChallengesUseCase: GetUserSolvedChallengesUseCase,
+    private val getUserSubmissionsByChallengeIdUseCase: GetUserSubmissionsByChallengeIdUseCase
 ) {
 
     @GetMapping
@@ -67,5 +69,23 @@ class UserController(
         return ResponseEntity(challenges.map {
             ChallengeResponseDto.fromDomain(it)
         }, HttpStatus.OK)
+    }
+
+    @GetMapping("{userId}/challenges/{challengeId}/submissions")
+    fun getUserSubmissionsForChallenge(
+        @PathVariable userId: UUID,
+        @PathVariable challengeId: UUID
+    ): ResponseEntity<List<SubmissionResponseDto>> {
+        val submissions = getUserSubmissionsByChallengeIdUseCase.execute(
+            challengeId = challengeId,
+            userId = userId
+        ).getOrThrow()
+
+        return ResponseEntity(
+            submissions.map {
+                SubmissionResponseDto.fromDomain(it)
+            },
+            HttpStatus.OK
+        )
     }
 }

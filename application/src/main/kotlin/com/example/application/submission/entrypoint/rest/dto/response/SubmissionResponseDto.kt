@@ -13,7 +13,7 @@ data class SubmissionResponseDto(
     val code: String,
     val language: String,
     val submittedAt: LocalDateTime,
-    val evaluation: EvaluationResponseDto
+    val evaluation: EvaluationResponseDto?
 ) {
     companion object {
         fun fromDomain(submission: Submission) = SubmissionResponseDto(
@@ -24,7 +24,10 @@ data class SubmissionResponseDto(
             language = submission.language,
             submittedAt = submission.submittedAt,
             patternId = submission.patternId,
-            evaluation = EvaluationResponseDto.fromDomain(submission.evaluation!!)
+            evaluation = if (submission.evaluation != null)
+                EvaluationResponseDto.fromDomain(submission.evaluation!!)
+            else
+                null
         )
     }
 }
