@@ -1,5 +1,6 @@
 package com.example.application.user.entrypoint.rest
 
+import com.example.application.challenge.entrypoint.rest.dto.response.ChallengeResponseDto
 import com.example.application.user.entrypoint.rest.dto.request.StoreUserRequestDto
 import com.example.application.user.entrypoint.rest.dto.request.UpdateUserRequestDto
 import com.example.domain.user.entity.User
@@ -16,7 +17,8 @@ class UserController(
     private val getAllUsersUseCase: GetAllUsersUseCase,
     private val getUserByIdUseCase: GetUserByIdUseCase,
     private val updateUserUseCase: UpdateUserUseCase,
-    private val deleteUserUseCase: DeleteUserUseCase
+    private val deleteUserUseCase: DeleteUserUseCase,
+    private val getUserSolvedChallengesUseCase: GetUserSolvedChallengesUseCase
 ) {
 
     @GetMapping
@@ -53,5 +55,17 @@ class UserController(
     fun deleteUser(@PathVariable id: UUID): ResponseEntity<Unit> {
         deleteUserUseCase.execute(id)
         return ResponseEntity.noContent().build()
+    }
+
+    @GetMapping("/{id}/challenges")
+    fun getUserAnsweredChallenges(
+        @PathVariable id: UUID
+    ): ResponseEntity<List<ChallengeResponseDto>>{
+        val challenges = getUserSolvedChallengesUseCase.execute(id)
+            .getOrThrow()
+
+        return ResponseEntity(challenges.map {
+            ChallengeResponseDto.fromDomain(it)
+        }, HttpStatus.OK)
     }
 }
