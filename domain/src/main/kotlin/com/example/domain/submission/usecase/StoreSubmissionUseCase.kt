@@ -6,20 +6,17 @@ import com.example.domain.pattern.gateway.GetPatternByIdGateway
 import com.example.domain.submission.entity.Submission
 import com.example.domain.submission.entity.dto.StoreSubmissionDto
 import com.example.domain.submission.gateway.StoreSubmissionGateway
-import com.example.domain.user.gateway.GetUserByIdGateway
 import jakarta.inject.Named
 
 @Named
 class StoreSubmissionUseCase (
     private val storeSubmissionGateway: StoreSubmissionGateway,
     private val getChallengeByIdGateway: GetChallengeByIdGateway,
-    private val getUserByIdGateway: GetUserByIdGateway,
     private val getPatternByIdGateway: GetPatternByIdGateway,
     private val storeEvaluationUseCase: StoreEvaluationUseCase,
 ) {
     fun execute(storeSubmissionDto: StoreSubmissionDto): Result<Submission> {
         val challenge = getChallengeByIdGateway.execute(storeSubmissionDto.challengeId).getOrThrow()
-        getUserByIdGateway.execute(storeSubmissionDto.userId).getOrThrow()
         val pattern = getPatternByIdGateway.execute(storeSubmissionDto.patternId).getOrThrow()
         val submission = storeSubmissionGateway.execute(storeSubmissionDto).getOrThrow()
         val evaluation = storeEvaluationUseCase.execute(
