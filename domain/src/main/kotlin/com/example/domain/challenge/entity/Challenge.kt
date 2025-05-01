@@ -10,4 +10,5 @@ data class Challenge(
     val description: String,
     val publishedAt: LocalDateTime,
     val createdAt: LocalDateTime,
+    val isDaily: Boolean = false,
 )

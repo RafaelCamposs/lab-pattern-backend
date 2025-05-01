@@ -25,6 +25,8 @@ data class ChallengeModel (
     val publishedAt : LocalDateTime? = null,
 
     val createdAt: LocalDateTime = LocalDateTime.now(),
+
+    val isDaily: Boolean = false,
 ) {
     fun toDomain() = Challenge(
         id = id!!,
@@ -42,6 +44,7 @@ data class ChallengeModel (
                 description = storeChallengeDto.description,
                 expectedPatternId = storeChallengeDto.expectedPatternId,
                 publishedAt = storeChallengeDto.publishedAt,
+                isDaily = storeChallengeDto.isDaily
             )
     }
 }

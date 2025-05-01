@@ -7,5 +7,6 @@ data class StoreChallengeDto (
     val title: String,
     val expectedPatternId: UUID,
     val description: String,
-    val publishedAt: LocalDateTime = LocalDateTime.now()
+    val publishedAt: LocalDateTime = LocalDateTime.now(),
+    val isDaily: Boolean = false,
 )

@@ -4,5 +4,6 @@ CREATE TABLE challenge (
   description TEXT NOT NULL,
   expected_pattern_id BINARY(16) REFERENCES design_pattern(id),
   published_at DATE NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  is_daily BOOLEAN DEFAULT FALSE
 );

@@ -1,4 +1,4 @@
-package com.example.application.schedule
+package com.example.application.challenge.schedule
 
 import com.example.application.integration.openapi.services.GetOpenAiQuestionService
 import com.example.domain.challenge.entity.dto.StoreChallengeDto
@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 @Component
-class GenerateChallengeService (
+class GenerateDailyChallengeSchedule (
     private val getRandomPatternUseCase: GetRandomPatternUseCase,
     private val getRandomThemeUseCase: GetRandomThemeUseCase,
     private val storeChallengeUseCase: StoreChallengeUseCase,
@@ -26,6 +26,7 @@ class GenerateChallengeService (
             expectedPatternId = patternResult.id,
             title = openApiChallengeResponseDto.title,
             description = openApiChallengeResponseDto.description,
+            isDaily = true
         )
 
         storeChallengeUseCase.execute(storeChallengeDto).onFailure {

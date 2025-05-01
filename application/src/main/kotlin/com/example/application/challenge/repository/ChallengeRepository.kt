@@ -19,4 +19,15 @@ interface ChallengeRepository : JpaRepository<ChallengeModel, UUID> {
         nativeQuery = true
     )
     fun findByUserIdWithSubmission(id: UUID) : List<ChallengeModel>
+
+    @Query(
+        """
+            SELECT * FROM challenge c
+            WHERE c.is_daily = true
+            ORDER BY c.created_at DESC
+            LIMIT 1
+        """,
+        nativeQuery = true
+    )
+    fun findLatestDailyChallenge(): ChallengeModel
 }
