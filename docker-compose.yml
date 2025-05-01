@@ -4,7 +4,7 @@ services:
     container_name: daily_pattern_backend-mysql
     environment:
       MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: daily-pattern-backend
+      MYSQL_DATABASE: daily_pattern_backend
     ports:
       - "3306:3306"
     volumes:

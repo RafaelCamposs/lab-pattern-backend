@@ -1,2 +1,2 @@
-rootProject.name = "trophy-lab-backend"
+rootProject.name = "daily-pattern-backend"
 include("domain", "application")
