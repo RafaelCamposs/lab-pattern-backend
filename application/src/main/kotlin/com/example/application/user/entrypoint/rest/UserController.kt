@@ -2,6 +2,7 @@ package com.example.application.user.entrypoint.rest
 
 import com.example.application.challenge.entrypoint.rest.dto.response.ChallengeResponseDto
 import com.example.application.submission.entrypoint.rest.dto.response.SubmissionResponseDto
+import com.example.application.user.entrypoint.rest.dto.UserStatisticsResponseDto
 import com.example.domain.user.usecase.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,7 +14,8 @@ import java.util.*
 @RequestMapping("/v1/users")
 class UserController(
     private val getUserSolvedChallengesUseCase: GetUserSolvedChallengesUseCase,
-    private val getUserSubmissionsByChallengeIdUseCase: GetUserSubmissionsByChallengeIdUseCase
+    private val getUserSubmissionsByChallengeIdUseCase: GetUserSubmissionsByChallengeIdUseCase,
+    private val getUserStatisticsUseCase: GetUserStatisticsUseCase,
 ) {
     @GetMapping("/{id}/challenges")
     fun getUserAnsweredChallenges(
@@ -41,6 +43,18 @@ class UserController(
             submissions.map {
                 SubmissionResponseDto.fromDomain(it)
             },
+            HttpStatus.OK
+        )
+    }
+
+    @GetMapping("{userId}/statistics")
+    fun getUserStatistics(
+        @PathVariable userId: UUID
+    ): ResponseEntity<UserStatisticsResponseDto> {
+        val statistics = getUserStatisticsUseCase.execute(userId).getOrThrow()
+
+        return ResponseEntity(
+            UserStatisticsResponseDto.fromDomain(statistics),
             HttpStatus.OK
         )
     }

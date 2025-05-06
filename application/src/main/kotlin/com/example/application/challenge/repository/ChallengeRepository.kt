@@ -22,6 +22,16 @@ interface ChallengeRepository : JpaRepository<ChallengeModel, UUID> {
 
     @Query(
         """
+            SELECT COUNT(c.id) FROM challenge c
+            LEFT JOIN submission s on s.challenge_id = c.id
+            WHERE s.user_id = :userId
+        """,
+        nativeQuery = true
+    )
+    fun countByUserIdWithSubmission(userId: UUID): Int
+
+    @Query(
+        """
             SELECT * FROM challenge c
             WHERE c.is_daily = true
             ORDER BY c.created_at DESC
