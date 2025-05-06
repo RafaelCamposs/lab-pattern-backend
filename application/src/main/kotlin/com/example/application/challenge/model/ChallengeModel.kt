@@ -34,7 +34,8 @@ data class ChallengeModel (
         description = description,
         expectedPatternId = expectedPatternId,
         publishedAt = publishedAt!!,
-        createdAt = createdAt
+        createdAt = createdAt,
+        isDaily = isDaily
     )
 
     companion object {
