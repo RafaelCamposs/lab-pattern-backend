@@ -3,6 +3,7 @@ package com.example.application.user.entrypoint.rest
 import com.example.application.challenge.entrypoint.rest.dto.response.ChallengeResponseDto
 import com.example.application.submission.entrypoint.rest.dto.response.SubmissionResponseDto
 import com.example.application.user.entrypoint.rest.dto.UserStatisticsResponseDto
+import com.example.domain.common.Page
 import com.example.domain.user.usecase.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -19,14 +20,21 @@ class UserController(
 ) {
     @GetMapping("/{id}/challenges")
     fun getUserAnsweredChallenges(
-        @PathVariable id: UUID
-    ): ResponseEntity<List<ChallengeResponseDto>>{
-        val challenges = getUserSolvedChallengesUseCase.execute(id)
+        @PathVariable id: UUID,
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "10") pageSize: Int
+    ): ResponseEntity<Page<ChallengeResponseDto>>{
+        val challenges = getUserSolvedChallengesUseCase.execute(
+            id,
+            page,
+            pageSize
+        )
             .getOrThrow()
 
-        return ResponseEntity(challenges.map {
-            ChallengeResponseDto.fromDomain(it)
-        }, HttpStatus.OK)
+        return ResponseEntity(
+            ChallengeResponseDto.fromPageDomain(challenges),
+            HttpStatus.OK
+        )
     }
 
     @GetMapping("{userId}/challenges/{challengeId}/submissions")

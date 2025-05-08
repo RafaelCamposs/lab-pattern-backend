@@ -1,6 +1,8 @@
 package com.example.application.challenge.repository
 
 import com.example.application.challenge.model.ChallengeModel
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
@@ -16,9 +18,17 @@ interface ChallengeRepository : JpaRepository<ChallengeModel, UUID> {
             WHERE s.user_id = :id
             GROUP BY c.id
         """,
+        countQuery = """ 
+            SELECT COUNT(DISTINCT c.id) FROM challenge c
+            LEFT JOIN submission s on s.challenge_id = c.id
+            WHERE s.user_id = :id
+        """ ,
         nativeQuery = true
     )
-    fun findByUserIdWithSubmission(id: UUID) : List<ChallengeModel>
+    fun findByUserIdWithSubmission(
+        id: UUID,
+        pageable: Pageable
+    ) : Page<ChallengeModel>
 
     @Query(
         """

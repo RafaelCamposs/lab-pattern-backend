@@ -21,5 +21,18 @@ data class ChallengeResponseDto(
                 publishedAt = challenge.publishedAt
             )
         }
+
+        fun fromPageDomain(
+            page: com.example.domain.common.Page<Challenge>
+        ): com.example.domain.common.Page<ChallengeResponseDto> {
+            return com.example.domain.common.Page(
+                content = page.content.map { fromDomain(it) },
+                totalElements = page.totalElements,
+                totalPages = page.totalPages,
+                currentPage = page.currentPage,
+                pageSize = page.pageSize,
+                isLast = page.isLast
+            )
+        }
     }
 }
