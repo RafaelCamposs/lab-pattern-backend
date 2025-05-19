@@ -34,7 +34,7 @@ class GetOpenAiSubmissionEvaluationService (
 
             val params = ChatCompletionCreateParams
                 .builder()
-                .model(ChatModel.GPT_4O_MINI)
+                .model(ChatModel.GPT_4_TURBO)
                 .addUserMessage(
                     prompt
                 )
