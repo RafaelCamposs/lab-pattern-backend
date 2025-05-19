@@ -15,7 +15,7 @@ class GenerateDailyChallengeSchedule (
     private val storeChallengeUseCase: StoreChallengeUseCase,
     private val getOpenAiQuestionService: GetOpenAiQuestionService,
 ) {
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(cron = "0 0 8 * * *")
     fun execute() {
         val patternResult = getRandomPatternUseCase.execute().getOrThrow()
         val themeResult = getRandomThemeUseCase.execute().getOrThrow()
