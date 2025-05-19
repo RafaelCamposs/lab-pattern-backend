@@ -1,5 +1,6 @@
 package com.example.application.integration.openapi.services
 
+import com.example.application.integration.openapi.config.OpenAiPromptConfig
 import com.example.application.integration.openapi.dto.response.OpenAiEvaluationResponseDto
 import com.example.domain.challenge.entity.Challenge
 import com.example.domain.evaluation.entity.dto.AiEvaluationDto
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component
 @Component
 class GetOpenAiSubmissionEvaluationService (
     private val openAiClient: OpenAIClient,
+    private val promptConfig: OpenAiPromptConfig,
     private val objectMapper: ObjectMapper
 ): EvaluateSubmissionWithAiGateway {
 
@@ -23,32 +25,13 @@ class GetOpenAiSubmissionEvaluationService (
         challenge: Challenge,
         submission: Submission
     ): Result<AiEvaluationDto> {
-        val prompt = """"
-            You are an expert software engineer specializing in design patterns. 
-            
-            Evaluate the following solution for a design pattern problem. 
-            Problem Title: ${challenge.title}
-            Problem Description: ${challenge.description} 
-            Expected Pattern: ${pattern.name}
-            Description: ${pattern.description}
-            Language: ${submission.language}
-            Code Solution: ${submission.code}
-              
-            Please evaluate the solution based on: 
-            1. Correct implementation of the ${pattern.name} pattern 
-            2. Code quality and best practices 
-            3. Solution effectiveness for the given problem
-            
-            Provide a detailed evaluation in the following JSON structure without the json markdown indicator: 
-            { 
-                "score": [A number between 0-100],
-                "feedback": [Array of general feedback points],
-                "strengths": [Array of specific strengths],
-                "improvements": [Array of specific areas for improvement] 
-            }                  
-        """
-
         return runCatching {
+            val prompt = promptConfig.getSubmissionEvaluationPrompt(
+                pattern,
+                challenge,
+                submission
+            )
+
             val params = ChatCompletionCreateParams
                 .builder()
                 .model(ChatModel.GPT_4O_MINI)
