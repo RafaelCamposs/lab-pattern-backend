@@ -4,7 +4,7 @@ import jakarta.inject.Named
 
 @Named
 class GetRandomThemeUseCase () {
-    private val themes = listOf(
+    val themes = listOf(
         "Food delivery app",
         "Video streaming platform",
         "Hotel reservation system",

@@ -16,19 +16,19 @@ class StoreSubmissionUseCase (
     private val storeEvaluationUseCase: StoreEvaluationUseCase,
 ) {
     fun execute(storeSubmissionDto: StoreSubmissionDto): Result<Submission> {
-        val challenge = getChallengeByIdGateway.execute(storeSubmissionDto.challengeId).getOrThrow()
-        val pattern = getPatternByIdGateway.execute(storeSubmissionDto.patternId).getOrThrow()
-        val submission = storeSubmissionGateway.execute(storeSubmissionDto).getOrThrow()
-        val evaluation = storeEvaluationUseCase.execute(
-            submission = submission,
-            challenge = challenge,
-            pattern = pattern,
-        ).getOrThrow()
+        return runCatching {
+            val challenge = getChallengeByIdGateway.execute(storeSubmissionDto.challengeId).getOrThrow()
+            val pattern = getPatternByIdGateway.execute(storeSubmissionDto.patternId).getOrThrow()
+            val submission = storeSubmissionGateway.execute(storeSubmissionDto).getOrThrow()
+            val evaluation = storeEvaluationUseCase.execute(
+                submission = submission,
+                challenge = challenge,
+                pattern = pattern,
+            ).getOrThrow()
 
-        return Result.success(
             submission.copy(
                 evaluation = evaluation,
             )
-        )
+        }
     }
 }

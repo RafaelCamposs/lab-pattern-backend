@@ -19,18 +19,20 @@ class StoreEvaluationUseCase (
         challenge: Challenge,
         pattern: DesignPattern,
     ): Result<Evaluation> {
-        val aiEvaluation = evaluateSubmissionWithAiGateway.execute(
-            submission = submission,
-            challenge = challenge,
-            pattern = pattern,
-        ).getOrThrow()
+        return runCatching {
+            val aiEvaluation = evaluateSubmissionWithAiGateway.execute(
+                submission = submission,
+                challenge = challenge,
+                pattern = pattern,
+            ).getOrThrow()
 
-        val storeEvaluationDto = StoreEvaluationDto(
-            submissionId = submission.id!!,
-            userId = submission.userId,
-            aiEvaluationDto = aiEvaluation,
-        )
+            val storeEvaluationDto = StoreEvaluationDto(
+                submissionId = submission.id!!,
+                userId = submission.userId,
+                aiEvaluationDto = aiEvaluation,
+            )
 
-        return storeEvaluationGateway.execute(storeEvaluationDto)
+            storeEvaluationGateway.execute(storeEvaluationDto).getOrThrow()
+        }
     }
 }

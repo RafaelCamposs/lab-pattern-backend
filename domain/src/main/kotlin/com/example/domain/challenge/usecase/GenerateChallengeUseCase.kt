@@ -16,17 +16,19 @@ class GenerateChallengeUseCase (
     private val getRandomThemeUseCase: GetRandomThemeUseCase,
 ) {
     fun execute(): Result<Challenge> {
-        val patternResult = getRandomPatternUseCase.execute().getOrThrow()
-        val themeResult = getRandomThemeUseCase.execute().getOrThrow()
+        return runCatching {
+            val patternResult = getRandomPatternUseCase.execute().getOrThrow()
+            val themeResult = getRandomThemeUseCase.execute().getOrThrow()
 
-        val openAiChallengeResponseDto = getAiQuestionGateway.execute(patternResult, themeResult).getOrThrow()
+            val openAiChallengeResponseDto = getAiQuestionGateway.execute(patternResult, themeResult).getOrThrow()
 
-        val storeChallengeDto = StoreChallengeDto(
-            expectedPatternId = patternResult.id,
-            title = openAiChallengeResponseDto.title,
-            description = openAiChallengeResponseDto.description,
-        )
+            val storeChallengeDto = StoreChallengeDto(
+                expectedPatternId = patternResult.id,
+                title = openAiChallengeResponseDto.title,
+                description = openAiChallengeResponseDto.description,
+            )
 
-        return storeChallengeGateway.execute(storeChallengeDto)
+            storeChallengeGateway.execute(storeChallengeDto).getOrThrow()
+        }
     }
 }
