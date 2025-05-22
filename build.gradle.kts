@@ -40,7 +40,11 @@ allprojects {
 project(":domain") {
     dependencies {
         implementation("jakarta.inject:jakarta.inject-api:2.0.1")
+
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+        testImplementation("io.mockk:mockk:1.13.5")
+        testImplementation("org.jetbrains.kotlin:kotlin-test")
+        testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
     }
 
