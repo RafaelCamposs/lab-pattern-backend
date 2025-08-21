@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class OpenAiConfig(
-    @Value("\${open-ai.api-key}")
+    @param:Value($$"${open-ai.api-key}")
     private val openAiApiKey: String,
-    @Value("\${open-ai.organization-id}")
+    @param:Value($$"${open-ai.organization-id}")
     private val openAiOrganizationId: String,
-    @Value("\${open-ai.project-id}")
+    @param:Value($$"${open-ai.project-id}")
     private val openAiProjectId: String,
 ) {
     @Bean

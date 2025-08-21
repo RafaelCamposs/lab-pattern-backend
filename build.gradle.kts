@@ -1,17 +1,14 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.0.0"
-    id("io.spring.dependency-management") version "1.1.0"
-    kotlin("jvm") version "1.7.22"
-    kotlin("plugin.spring") version "1.7.22"
-    kotlin("plugin.jpa") version "1.7.22"
+    id("org.springframework.boot") version "3.5.4"
+    id("io.spring.dependency-management") version "1.1.7"
+    kotlin("jvm") version "2.2.10"
+    kotlin("plugin.spring") version "2.2.10"
+    kotlin("plugin.jpa") version "2.2.10"
 }
 
 group = "com.example"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
-java.targetCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
@@ -24,17 +21,15 @@ allprojects {
         mavenCentral()
     }
 
+    kotlin{
+        jvmToolchain(22)
+    }
+
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
     }
 
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = "17"
-            freeCompilerArgs = listOf("-Xjsr305=strict")
-        }
-    }
 }
 
 project(":domain") {
@@ -66,10 +61,10 @@ project(":application") {
         implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
         implementation("org.springframework.security:spring-security-crypto")
         implementation("org.springframework.boot:spring-boot-starter-validation")
-        implementation("org.flywaydb:flyway-mysql:9.22.3")
+        implementation("org.flywaydb:flyway-mysql")
         implementation("com.mysql:mysql-connector-j:8.0.33")
         implementation("com.openai:openai-java:1.3.0")
-        implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.0")
+        implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
         runtimeOnly("com.h2database:h2")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
