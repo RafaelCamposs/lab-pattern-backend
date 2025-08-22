@@ -27,6 +27,9 @@ open-ai:
   project-id: ${OPENAI_PROJECT_ID}
   organization-id: ${OPENAI_ORG_ID}
 
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+
 logging:
   level:
     org.hibernate.SQL: DEBUG
