@@ -62,9 +62,13 @@ class SecurityConfig(
     fun securityFilterChain(http: HttpSecurity, jwtAuthFilter: JwtAuthenticationFilter): SecurityFilterChain {
         http
             .csrf { it.disable() }
+            .cors { }
             .authorizeHttpRequests {
                 it
                     .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/v1/patterns/**").authenticated()
+                    .requestMatchers("/v1/challenges/**").authenticated()
+                    .requestMatchers("/v1/submissions/**").authenticated()
                     .anyRequest().authenticated()
             }
             .sessionManagement {

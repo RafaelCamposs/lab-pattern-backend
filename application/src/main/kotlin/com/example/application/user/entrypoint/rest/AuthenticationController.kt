@@ -9,7 +9,6 @@ import com.example.domain.user.usecase.StoreUserUseCase
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
-@CrossOrigin(allowedHeaders = ["*"], origins = ["*"])
 @RestController
 @RequestMapping("/api/auth")
 class AuthenticationController(

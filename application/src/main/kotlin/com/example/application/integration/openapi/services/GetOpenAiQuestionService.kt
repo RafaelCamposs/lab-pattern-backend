@@ -35,8 +35,17 @@ class GetOpenAiQuestionService(
 
             val openApiResponse = openAiClient.chat().completions().create(params)
 
-            val jsonResponse =  openApiResponse.choices()[0].message().content().get()
-            objectMapper.readValue(jsonResponse, OpenApiChallengeResponseDto::class.java).toDomain()
+            val jsonResponse = openApiResponse.choices()[0].message().content().get()
+
+            val cleanedJson = if (jsonResponse.contains("```json")) {
+                jsonResponse.substringAfter("```json").substringBefore("```").trim()
+            } else if (jsonResponse.contains("```")) {
+                jsonResponse.substringAfter("```").substringBefore("```").trim()
+            } else {
+                jsonResponse.trim()
+            }
+
+            objectMapper.readValue(cleanedJson, OpenApiChallengeResponseDto::class.java).toDomain()
         }
     }
 }

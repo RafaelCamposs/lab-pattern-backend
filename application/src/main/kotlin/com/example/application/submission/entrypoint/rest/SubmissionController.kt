@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
-@CrossOrigin(allowedHeaders = ["*"], origins = ["*"])
 @RestController
 @RequestMapping("/v1/submissions")
 class SubmissionController (

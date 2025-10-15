@@ -23,7 +23,8 @@ class AuthenticationService(
             .password(user.password)
             .authorities(SimpleGrantedAuthority("USER"))
             .build()
-        val jwtToken = jwtService.generateToken(userDetails)
+        val extraClaims = mapOf("userId" to user.id.toString())
+        val jwtToken = jwtService.generateToken(extraClaims, userDetails)
         return AuthenticationResponseDto(token = jwtToken)
     }
 
@@ -41,7 +42,8 @@ class AuthenticationService(
             .password(user.password)
             .authorities(SimpleGrantedAuthority("USER"))
             .build()
-        val jwtToken = jwtService.generateToken(userDetails)
+        val extraClaims = mapOf("userId" to user.id.toString())
+        val jwtToken = jwtService.generateToken(extraClaims, userDetails)
         return AuthenticationResponseDto(token = jwtToken)
     }
 }
