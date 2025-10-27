@@ -16,7 +16,6 @@ spring:
     enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migrations
-    schemas: daily_pattern_backend
     validate-on-migrate: true
 
 server:
