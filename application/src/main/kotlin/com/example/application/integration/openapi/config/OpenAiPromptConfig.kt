@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration
 class OpenAiPromptConfig(
     private val promptLoader: PromptLoader
 ) {
-    private val challengePrompt: String = promptLoader.loadPrompt("challenge-generation")
-    private val evaluationPrompt: String = promptLoader.loadPrompt("submission-evaluation")
+    private val challengePrompt: String = promptLoader.loadPrompt("challenge-generation-improved")
+    private val evaluationPrompt: String = promptLoader.loadPrompt("submission-evaluation-improved")
 
     fun getChallengePrompt(pattern: DesignPattern, theme: String): String {
         return challengePrompt

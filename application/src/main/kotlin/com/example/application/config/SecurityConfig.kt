@@ -66,6 +66,9 @@ class SecurityConfig(
             .authorizeHttpRequests {
                 it
                     .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/actuator/health/**").permitAll()
+                    .requestMatchers("/actuator/info").permitAll()
+                    .requestMatchers("/actuator/**").authenticated()
                     .requestMatchers("/v1/patterns/**").authenticated()
                     .requestMatchers("/v1/challenges/**").authenticated()
                     .requestMatchers("/v1/submissions/**").authenticated()
