@@ -5,6 +5,8 @@ import com.example.domain.challenge.entity.dto.StoreChallengeDto
 import com.example.domain.challenge.usecase.StoreChallengeUseCase
 import com.example.domain.pattern.usecase.GetRandomPatternUseCase
 import com.example.domain.pattern.usecase.GetRandomThemeUseCase
+import org.springframework.boot.context.event.ApplicationReadyEvent
+import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
@@ -15,7 +17,13 @@ class GenerateDailyChallengeSchedule (
     private val storeChallengeUseCase: StoreChallengeUseCase,
     private val getOpenAiQuestionService: GetOpenAiQuestionService,
 ) {
-    @Scheduled(cron = "0 0 8 * * *")
+    @EventListener(ApplicationReadyEvent::class)
+    fun executeOnStartup() {
+        println("Running daily challenge generation on application startup")
+        execute()
+    }
+
+    @Scheduled(cron = "0 0 */8 * * *")
     fun execute() {
         val patternResult = getRandomPatternUseCase.execute().getOrThrow()
         val themeResult = getRandomThemeUseCase.execute().getOrThrow()
