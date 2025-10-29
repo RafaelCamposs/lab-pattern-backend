@@ -10,38 +10,59 @@ import java.time.temporal.ChronoUnit
 class GetUserStreaksUseCase {
     fun execute(submissions: List<Submission>): Result<StreaksDto> {
         return runCatching {
-            val submissionDates = submissions.map { it.submittedAt.toLocalDate() }
+            if (submissions.isEmpty()) {
+                return@runCatching StreaksDto(currentStreak = 0, longestStreak = 0)
+            }
+
+            val submissionDates = submissions
+                .map { it.submittedAt.toLocalDate() }
+                .distinct()
+                .sorted()
+
             val maxStreak = calculateMaxStreak(submissionDates)
             val currentStreak = calculateCurrentStreak(submissionDates)
 
-            StreaksDto(maxStreak, currentStreak)
+            StreaksDto(currentStreak = currentStreak, longestStreak = maxStreak)
         }
     }
 
     private fun calculateMaxStreak(submissionDates: List<LocalDate>): Int {
-        var maxStreak = 0
-        var tempStreak = 1
+        if (submissionDates.isEmpty()) return 0
+
+        var maxStreak = 1
+        var currentStreak = 1
 
         for (i in 1 until submissionDates.size) {
             val diff = ChronoUnit.DAYS.between(submissionDates[i - 1], submissionDates[i])
             if (diff == 1L) {
-                tempStreak++
-            } else if (diff > 1) {
-                maxStreak = maxOf(maxStreak, tempStreak)
-                tempStreak = 1
+                currentStreak++
+                maxStreak = maxOf(maxStreak, currentStreak)
+            } else {
+                currentStreak = 1
             }
         }
 
-        return maxOf(maxStreak, tempStreak)
+        return maxStreak
     }
 
     private fun calculateCurrentStreak(submissionDates: List<LocalDate>): Int {
-        var currentStreak = 0
+        if (submissionDates.isEmpty()) return 0
 
-        for (i in submissionDates.indices.reversed()) {
-            val expected = LocalDate.now().minusDays((submissionDates.size - 1 - i).toLong())
-            if (submissionDates[i] == expected) {
+        val today = LocalDate.now()
+        val lastSubmission = submissionDates.last()
+
+        val daysSinceLastSubmission = ChronoUnit.DAYS.between(lastSubmission, today)
+        if (daysSinceLastSubmission > 1) {
+            return 0
+        }
+
+        var currentStreak = 1
+        var expectedDate = lastSubmission.minusDays(1)
+
+        for (i in submissionDates.size - 2 downTo 0) {
+            if (submissionDates[i] == expectedDate) {
                 currentStreak++
+                expectedDate = expectedDate.minusDays(1)
             } else {
                 break
             }
