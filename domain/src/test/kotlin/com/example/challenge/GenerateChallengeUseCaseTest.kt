@@ -19,8 +19,9 @@ import java.util.UUID
 class GenerateChallengeUseCaseTest {
     private val getAiQuestionGateway: GetAiQuestionGateway = mockk()
     private val storeChallengeGateway: StoreChallengeGateway = mockk()
-    private val getRandomPatternUseCase: GetRandomPatternUseCase = mockk()
-    private val getRandomThemeUseCase: GetRandomThemeUseCase = mockk()
+    private val getAllPatternsGateway: com.example.domain.pattern.gateway.GetAllPatternsGateway = mockk()
+    private val getRandomPatternUseCase: GetRandomPatternUseCase = GetRandomPatternUseCase(getAllPatternsGateway)
+    private val getRandomThemeUseCase: GetRandomThemeUseCase = GetRandomThemeUseCase()
 
     private val useCase = GenerateChallengeUseCase(
         getAiQuestionGateway,
@@ -37,7 +38,6 @@ class GenerateChallengeUseCaseTest {
             category = "Behavioral",
             description = "Strategy pattern description"
         )
-        val theme = "E-commerce"
         val aiResponse = AiQuestionDto(
             title = "Shopping Cart Discount",
             description = "Implement a shopping cart with different discount strategies"
@@ -51,9 +51,8 @@ class GenerateChallengeUseCaseTest {
             publishedAt = LocalDateTime.now()
         )
 
-        every { getRandomPatternUseCase.execute() } returns Result.success(pattern)
-        every { getRandomThemeUseCase.execute() } returns Result.success(theme)
-        every { getAiQuestionGateway.execute(pattern, theme) } returns Result.success(aiResponse)
+        every { getAllPatternsGateway.execute() } returns Result.success(listOf(pattern))
+        every { getAiQuestionGateway.execute(pattern, any()) } returns Result.success(aiResponse)
         every {
             storeChallengeGateway.execute(match {
                 it.expectedPatternId == pattern.id &&
@@ -67,9 +66,8 @@ class GenerateChallengeUseCaseTest {
         Assertions.assertTrue(result.isSuccess)
         Assertions.assertEquals(challenge, result.getOrNull())
         verify {
-            getRandomPatternUseCase.execute()
-            getRandomThemeUseCase.execute()
-            getAiQuestionGateway.execute(pattern, theme)
+            getAllPatternsGateway.execute()
+            getAiQuestionGateway.execute(pattern, any())
             storeChallengeGateway.execute(any())
         }
     }
@@ -77,29 +75,12 @@ class GenerateChallengeUseCaseTest {
     @Test
     fun `should propagate pattern use case error`() {
         val error = RuntimeException("Pattern error")
-        every { getRandomPatternUseCase.execute() } returns Result.failure(error)
+        every { getAllPatternsGateway.execute() } returns Result.failure(error)
 
         val result = useCase.execute()
 
-        Assertions.assertThrows(RuntimeException::class.java) { result.getOrThrow() }
-    }
-
-    @Test
-    fun `should propagate theme use case error`() {
-        val pattern = DesignPattern(
-            id = UUID.randomUUID(),
-            name = "Strategy",
-            category = "Behavioral",
-            description = "Strategy pattern description"
-        )
-        val error = RuntimeException("Theme error")
-
-        every { getRandomPatternUseCase.execute() } returns Result.success(pattern)
-        every { getRandomThemeUseCase.execute() } returns Result.failure(error)
-
-        val result = useCase.execute()
-
-        Assertions.assertThrows(RuntimeException::class.java) { result.getOrThrow() }
+        Assertions.assertTrue(result.isFailure)
+        Assertions.assertEquals(error, result.exceptionOrNull())
     }
 
     @Test
@@ -110,16 +91,15 @@ class GenerateChallengeUseCaseTest {
             category = "Behavioral",
             description = "Strategy pattern description"
         )
-        val theme = "E-commerce"
         val error = RuntimeException("AI error")
 
-        every { getRandomPatternUseCase.execute() } returns Result.success(pattern)
-        every { getRandomThemeUseCase.execute() } returns Result.success(theme)
-        every { getAiQuestionGateway.execute(pattern, theme) } returns Result.failure(error)
+        every { getAllPatternsGateway.execute() } returns Result.success(listOf(pattern))
+        every { getAiQuestionGateway.execute(pattern, any()) } returns Result.failure(error)
 
         val result = useCase.execute()
 
-        Assertions.assertThrows(RuntimeException::class.java) { result.getOrThrow() }
+        Assertions.assertTrue(result.isFailure)
+        Assertions.assertEquals(error, result.exceptionOrNull())
     }
 
     @Test
@@ -130,16 +110,14 @@ class GenerateChallengeUseCaseTest {
             category = "Behavioral",
             description = "Strategy pattern description"
         )
-        val theme = "E-commerce"
         val aiResponse = AiQuestionDto(
             title = "Shopping Cart Discount",
             description = "Implement a shopping cart with different discount strategies"
         )
         val error = RuntimeException("Storage error")
 
-        every { getRandomPatternUseCase.execute() } returns Result.success(pattern)
-        every { getRandomThemeUseCase.execute() } returns Result.success(theme)
-        every { getAiQuestionGateway.execute(pattern, theme) } returns Result.success(aiResponse)
+        every { getAllPatternsGateway.execute() } returns Result.success(listOf(pattern))
+        every { getAiQuestionGateway.execute(pattern, any()) } returns Result.success(aiResponse)
         every { storeChallengeGateway.execute(any()) } returns Result.failure(error)
 
         val result = useCase.execute()
