@@ -1,10 +1,10 @@
 
 plugins {
-    id("org.springframework.boot") version "3.5.4"
-    id("io.spring.dependency-management") version "1.1.7"
+    id("org.springframework.boot") version "3.5.4" apply false
+    id("io.spring.dependency-management") version "1.1.7" apply false
     kotlin("jvm") version "2.2.10"
-    kotlin("plugin.spring") version "2.2.10"
-    kotlin("plugin.jpa") version "2.2.10"
+    kotlin("plugin.spring") version "2.2.10" apply false
+    kotlin("plugin.jpa") version "2.2.10" apply false
 }
 
 group = "com.example"
@@ -69,10 +69,9 @@ project(":application") {
         implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
         runtimeOnly("com.h2database:h2")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
-        testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
-        testImplementation("org.mockito:mockito-core:4.8.0")
-        testImplementation("org.mockito:mockito-junit-jupiter:4.8.0")
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+        testImplementation("io.mockk:mockk:1.13.5")
+        testImplementation("org.jetbrains.kotlin:kotlin-test")
+        testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 
         implementation("io.jsonwebtoken:jjwt-api:0.11.5")
         runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
