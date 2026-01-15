@@ -5,6 +5,7 @@ import com.example.domain.challenge.entity.dto.StoreChallengeDto
 import com.example.domain.challenge.usecase.StoreChallengeUseCase
 import com.example.domain.pattern.usecase.GetRandomPatternUseCase
 import com.example.domain.pattern.usecase.GetRandomThemeUseCase
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Scheduled
@@ -18,6 +19,7 @@ class GenerateDailyChallengeSchedule (
     private val getOpenAiQuestionService: GetOpenAiQuestionService,
 ) {
     @EventListener(ApplicationReadyEvent::class)
+    @ConditionalOnProperty(name = ["spring.task.scheduling.enabled"], havingValue = "true", matchIfMissing = true)
     fun executeOnStartup() {
         println("Running daily challenge generation on application startup")
         execute()

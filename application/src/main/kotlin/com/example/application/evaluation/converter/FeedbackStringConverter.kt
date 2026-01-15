@@ -12,7 +12,15 @@ class FeedbackStringConverter(
     }
 
     override fun convertToEntityAttribute(feedbackAsJson: String?): Feedback {
-        return objectMapper.readValue(feedbackAsJson, Feedback::class.java)
+        if (feedbackAsJson == null) {
+            return Feedback(content = emptyList(), strengths = emptyList(), improvements = emptyList())
+        }
+
+        return try {
+            objectMapper.readValue(feedbackAsJson, Feedback::class.java)
+        } catch (e: Exception) {
+            Feedback(content = listOf(feedbackAsJson), strengths = emptyList(), improvements = emptyList())
+        }
     }
 
 }

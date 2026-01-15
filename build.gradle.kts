@@ -72,6 +72,13 @@ project(":application") {
         testImplementation("io.mockk:mockk:1.13.5")
         testImplementation("org.jetbrains.kotlin:kotlin-test")
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+        testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+        testImplementation("org.springframework.security:spring-security-test")
+        testImplementation(platform("org.testcontainers:testcontainers-bom:2.0.3"))
+        testImplementation("org.testcontainers:testcontainers")
+        testImplementation("org.testcontainers:mysql")
+        testImplementation("org.testcontainers:junit-jupiter")
+        testRuntimeOnly("com.h2database:h2")
 
         implementation("io.jsonwebtoken:jjwt-api:0.11.5")
         runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")

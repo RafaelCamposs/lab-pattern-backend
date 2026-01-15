@@ -6,6 +6,7 @@ import com.example.application.user.entrypoint.rest.dto.SignUpRequestDto
 import com.example.application.user.service.AuthenticationService
 import com.example.domain.user.entity.dto.StoreUserDto
 import com.example.domain.user.usecase.StoreUserUseCase
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -17,7 +18,7 @@ class AuthenticationController(
 ) {
 
     @PostMapping("/signup")
-    fun signup(@RequestBody signUpRequestDto: SignUpRequestDto): ResponseEntity<AuthenticationResponseDto> {
+    fun signup(@Valid @RequestBody signUpRequestDto: SignUpRequestDto): ResponseEntity<AuthenticationResponseDto> {
         val user = storeUserUseCase.execute(
             StoreUserDto(
                 name = signUpRequestDto.username,
