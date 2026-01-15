@@ -5,6 +5,7 @@ plugins {
     kotlin("jvm") version "2.2.10"
     kotlin("plugin.spring") version "2.2.10" apply false
     kotlin("plugin.jpa") version "2.2.10" apply false
+    id("org.sonarqube") version "7.2.2.6593"
 }
 
 group = "com.example"
@@ -12,6 +13,13 @@ version = "0.0.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "RafaelCamposs_lab-pattern-backend")
+        property("sonar.organization", "rafaelcamposs")
+    }
 }
 
 allprojects {
