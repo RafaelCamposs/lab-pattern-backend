@@ -28,11 +28,10 @@ subprojects {
     apply(plugin = "jacoco")
 
     tasks.withType<Test> {
-        finalizedBy(tasks.named<JacocoReport>("jacocoTestReport"))
+        finalizedBy(tasks.withType<JacocoReport>())
     }
 
-    tasks.named<JacocoReport>("jacocoTestReport") {
-        dependsOn(tasks.named<Test>("test"))
+    tasks.withType<JacocoReport> {
         reports {
             xml.required.set(true)
             html.required.set(true)
