@@ -5,6 +5,8 @@ plugins {
     kotlin("jvm") version "2.2.10"
     kotlin("plugin.spring") version "2.2.10" apply false
     kotlin("plugin.jpa") version "2.2.10" apply false
+    id("org.sonarqube") version "7.2.2.6593"
+    id("jacoco")
 }
 
 group = "com.example"
@@ -12,6 +14,29 @@ version = "0.0.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "RafaelCamposs_lab-pattern-backend")
+        property("sonar.organization", "rafaelcamposs")
+        property("sonar.coverage.jacoco.xmlReportPaths", "application/build/reports/jacoco/test/jacocoTestReport.xml,domain/build/reports/jacoco/test/jacocoTestReport.xml")
+    }
+}
+
+subprojects {
+    apply(plugin = "jacoco")
+
+    tasks.withType<Test> {
+        finalizedBy(tasks.withType<JacocoReport>())
+    }
+
+    tasks.withType<JacocoReport> {
+        reports {
+            xml.required.set(true)
+            html.required.set(true)
+        }
+    }
 }
 
 allprojects {
