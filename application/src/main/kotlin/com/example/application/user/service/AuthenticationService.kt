@@ -36,7 +36,7 @@ class AuthenticationService(
             )
         )
         val user = findUserByEmailService.execute(request.email).getOrThrow()
-            ?: throw IllegalArgumentException("User not found")
+            ?: throw IllegalArgumentException("Usuário não encontrado")
         val userDetails = User.builder()
             .username(user.email)
             .password(user.password)
