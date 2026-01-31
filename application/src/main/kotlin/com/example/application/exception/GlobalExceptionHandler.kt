@@ -26,8 +26,8 @@ class GlobalExceptionHandler {
         val errorResponse = ErrorResponse(
             timestamp = LocalDateTime.now(),
             status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            error = "Internal Server Error",
-            message = "Failed to load prompt configuration",
+            error = "Erro Interno do Servidor",
+            message = "Falha ao carregar configuração de prompt",
             path = request.getDescription(false).removePrefix("uri=")
         )
 
@@ -44,8 +44,8 @@ class GlobalExceptionHandler {
         val errorResponse = ErrorResponse(
             timestamp = LocalDateTime.now(),
             status = HttpStatus.NOT_FOUND.value(),
-            error = "Not Found",
-            message = ex.message ?: "Resource not found",
+            error = "Não Encontrado",
+            message = ex.message ?: "Recurso não encontrado",
             path = request.getDescription(false).removePrefix("uri=")
         )
 
@@ -62,8 +62,8 @@ class GlobalExceptionHandler {
         val errorResponse = ErrorResponse(
             timestamp = LocalDateTime.now(),
             status = HttpStatus.BAD_REQUEST.value(),
-            error = "Bad Request",
-            message = ex.message ?: "Invalid request parameters",
+            error = "Requisição Inválida",
+            message = ex.message ?: "Parâmetros de requisição inválidos",
             path = request.getDescription(false).removePrefix("uri=")
         )
 
@@ -80,8 +80,8 @@ class GlobalExceptionHandler {
         val errorResponse = ErrorResponse(
             timestamp = LocalDateTime.now(),
             status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            error = "Internal Server Error",
-            message = "An unexpected error occurred",
+            error = "Erro Interno do Servidor",
+            message = "Ocorreu um erro inesperado",
             path = request.getDescription(false).removePrefix("uri=")
         )
 
@@ -98,8 +98,8 @@ class GlobalExceptionHandler {
         val errorResponse = ErrorResponse(
             timestamp = LocalDateTime.now(),
             status = HttpStatus.UNAUTHORIZED.value(),
-            error = "Unauthorized",
-            message = "Authentication failed",
+            error = "Não Autorizado",
+            message = "Email ou senha inválidos",
             path = request.getDescription(false).removePrefix("uri=")
         )
 
@@ -118,8 +118,8 @@ class GlobalExceptionHandler {
         val errorResponse = ErrorResponse(
             timestamp = LocalDateTime.now(),
             status = HttpStatus.BAD_REQUEST.value(),
-            error = "Bad Request",
-            message = "Validation failed: $errors",
+            error = "Requisição Inválida",
+            message = "Falha na validação: $errors",
             path = request.getDescription(false).removePrefix("uri=")
         )
 
@@ -136,8 +136,8 @@ class GlobalExceptionHandler {
         val errorResponse = ErrorResponse(
             timestamp = LocalDateTime.now(),
             status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            error = "Internal Server Error",
-            message = "An unexpected error occurred",
+            error = "Erro Interno do Servidor",
+            message = "Ocorreu um erro inesperado",
             path = request.getDescription(false).removePrefix("uri=")
         )
 

@@ -107,7 +107,7 @@ class AuthenticationServiceTest {
             service.login(loginRequest)
         }
 
-        Assertions.assertEquals("User not found", exception.message)
+        Assertions.assertEquals("Usuário não encontrado", exception.message)
         verify { authenticationManager.authenticate(any()) }
         verify { findUserByEmailService.execute(loginRequest.email) }
         verify(exactly = 0) { jwtService.generateToken(any(), any()) }

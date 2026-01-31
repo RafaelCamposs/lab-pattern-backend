@@ -68,7 +68,7 @@ class StoreUserUseCaseTest {
 
         Assertions.assertTrue(result.isFailure)
         Assertions.assertTrue(result.exceptionOrNull() is IllegalArgumentException)
-        Assertions.assertEquals("User already Exists", result.exceptionOrNull()?.message)
+        Assertions.assertEquals("Usuário já existe", result.exceptionOrNull()?.message)
         verify { findUserByEmailGateway.execute(storeUserDto.email) }
         verify(exactly = 0) { storeUserGateway.execute(any()) }
     }

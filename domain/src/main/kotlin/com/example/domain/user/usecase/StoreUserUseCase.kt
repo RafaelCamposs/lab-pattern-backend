@@ -20,7 +20,7 @@ class StoreUserUseCase (
         } else {
             Result.failure(
                 IllegalArgumentException(
-                    "User already Exists"
+                    "Usuário já existe"
                 )
             )
         }

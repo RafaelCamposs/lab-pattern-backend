@@ -5,13 +5,13 @@ import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 
 data class SignUpRequestDto(
-    @field:NotBlank(message = "Username is required")
+    @field:NotBlank(message = "Nome de usuário é obrigatório")
     val username: String,
 
-    @field:NotBlank(message = "Email is required")
-    @field:Email(message = "Email must be valid")
+    @field:NotBlank(message = "Email é obrigatório")
+    @field:Email(message = "Email deve ser válido")
     val email: String,
 
-    @field:NotBlank(message = "Password is required")
+    @field:NotBlank(message = "Senha é obrigatória")
     val password: String
 )
