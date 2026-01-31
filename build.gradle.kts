@@ -90,7 +90,7 @@ project(":application") {
         implementation("org.springframework.boot:spring-boot-starter-validation")
         implementation("org.flywaydb:flyway-mysql")
         implementation("com.mysql:mysql-connector-j:8.0.33")
-        implementation("com.openai:openai-java:1.3.0")
+        implementation("com.openai:openai-java:4.0.0")
         implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
         runtimeOnly("com.h2database:h2")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
