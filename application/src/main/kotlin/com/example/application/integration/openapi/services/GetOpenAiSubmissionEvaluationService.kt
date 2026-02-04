@@ -9,8 +9,7 @@ import com.example.domain.pattern.entity.DesignPattern
 import com.example.domain.submission.entity.Submission
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.openai.client.OpenAIClient
-import com.openai.models.ChatModel
-import com.openai.models.chat.completions.ChatCompletionCreateParams
+import com.openai.models.responses.ResponseCreateParams
 import org.springframework.stereotype.Component
 
 @Component
@@ -34,17 +33,22 @@ class GetOpenAiSubmissionEvaluationService (
                 submission
             )
 
-            val params = ChatCompletionCreateParams
+            val params = ResponseCreateParams
                 .builder()
-                .model(ChatModel.GPT_5_CHAT_LATEST)
-                .addUserMessage(
-                    prompt
-                )
+                .input(prompt)
+                .model("gpt-5.2-codex")
                 .build()
 
-            val openApiResponse = openAiClient.chat().completions().create(params)
+            val openApiResponse = openAiClient.responses().create(params)
 
-            val jsonResponse =  openApiResponse.choices()[0].message().content().get()
+            val jsonResponse = openApiResponse.output()
+                .first { it.message().isPresent }
+                .message().get()
+                .content()
+                .first { it.outputText().isPresent }
+                .outputText().get()
+                .text()
+
             objectMapper.readValue(jsonResponse, OpenAiEvaluationResponseDto::class.java).toDomain()
         }
     }
