@@ -21,13 +21,16 @@ class OpenAiPromptConfig(
     }
 
     fun getSubmissionEvaluationPrompt(
-        pattern: DesignPattern,
+        selectedPattern: DesignPattern,
+        expectedPattern: DesignPattern,
         challenge: Challenge,
         submission: Submission
     ): String {
         return evaluationPrompt
-            .replace("\${pattern.name}", pattern.name)
-            .replace("\${pattern.description}", pattern.description)
+            .replace("\${expected_pattern.name}", expectedPattern.name)
+            .replace("\${expected_pattern.description}", expectedPattern.description)
+            .replace("\${selected_pattern.name}", selectedPattern.name)
+            .replace("\${selected_pattern.description}", selectedPattern.description)
             .replace("\${challenge.title}", challenge.title)
             .replace("\${challenge.description}", challenge.description)
             .replace("\${submission.language}", submission.language)

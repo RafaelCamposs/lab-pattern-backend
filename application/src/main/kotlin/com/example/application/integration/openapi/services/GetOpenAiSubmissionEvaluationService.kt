@@ -21,13 +21,15 @@ class GetOpenAiSubmissionEvaluationService (
 ): EvaluateSubmissionWithAiGateway {
 
     override fun execute(
-        pattern: DesignPattern,
+        selectedPattern: DesignPattern,
+        expectedPattern: DesignPattern,
         challenge: Challenge,
         submission: Submission
     ): Result<AiEvaluationDto> {
         return runCatching {
             val prompt = promptConfig.getSubmissionEvaluationPrompt(
-                pattern,
+                selectedPattern,
+                expectedPattern,
                 challenge,
                 submission
             )

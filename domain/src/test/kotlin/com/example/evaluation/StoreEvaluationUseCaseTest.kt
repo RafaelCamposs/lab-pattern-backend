@@ -27,6 +27,8 @@ class StoreEvaluationUseCaseTest {
 
     @Test
     fun `should store evaluation successfully`() {
+        val expectedPatternId = UUID.randomUUID()
+
         val submission = Submission(
             id = UUID.randomUUID(),
             challengeId = UUID.randomUUID(),
@@ -40,18 +42,25 @@ class StoreEvaluationUseCaseTest {
 
         val challenge = Challenge(
             id = submission.challengeId,
-            expectedPatternId = submission.patternId,
+            expectedPatternId = expectedPatternId,
             title = "Challenge",
             description = "Description",
             createdAt = LocalDateTime.now(),
             publishedAt = LocalDateTime.now()
         )
 
-        val pattern = DesignPattern(
+        val selectedPattern = DesignPattern(
             id = submission.patternId,
             name = "Strategy",
             category = "Behavioral",
             description = "Strategy pattern description"
+        )
+
+        val expectedPattern = DesignPattern(
+            id = expectedPatternId,
+            name = "Observer",
+            category = "Behavioral",
+            description = "Observer pattern description"
         )
 
         val aiEvaluation = AiEvaluationDto(
@@ -70,7 +79,7 @@ class StoreEvaluationUseCaseTest {
         )
 
         every {
-            evaluateSubmissionWithAiGateway.execute(pattern, challenge, submission)
+            evaluateSubmissionWithAiGateway.execute(selectedPattern, expectedPattern, challenge, submission)
         } returns Result.success(aiEvaluation)
 
         every {
@@ -81,18 +90,20 @@ class StoreEvaluationUseCaseTest {
             })
         } returns Result.success(evaluation)
 
-        val result = useCase.execute(submission, challenge, pattern)
+        val result = useCase.execute(submission, challenge, selectedPattern, expectedPattern)
 
         Assertions.assertTrue(result.isSuccess)
         Assertions.assertEquals(evaluation, result.getOrNull())
         verify {
-            evaluateSubmissionWithAiGateway.execute(pattern, challenge, submission)
+            evaluateSubmissionWithAiGateway.execute(selectedPattern, expectedPattern, challenge, submission)
             storeEvaluationGateway.execute(any())
         }
     }
 
     @Test
     fun `should propagate ai evaluation gateway error`() {
+        val expectedPatternId = UUID.randomUUID()
+
         val submission = Submission(
             id = UUID.randomUUID(),
             challengeId = UUID.randomUUID(),
@@ -106,37 +117,46 @@ class StoreEvaluationUseCaseTest {
 
         val challenge = Challenge(
             id = submission.challengeId,
-            expectedPatternId = submission.patternId,
+            expectedPatternId = expectedPatternId,
             title = "Challenge",
             description = "Description",
             createdAt = LocalDateTime.now(),
             publishedAt = LocalDateTime.now()
         )
 
-        val pattern = DesignPattern(
+        val selectedPattern = DesignPattern(
             id = submission.patternId,
             name = "Strategy",
             category = "Behavioral",
             description = "Strategy pattern description"
+        )
+
+        val expectedPattern = DesignPattern(
+            id = expectedPatternId,
+            name = "Observer",
+            category = "Behavioral",
+            description = "Observer pattern description"
         )
 
         val error = RuntimeException("AI evaluation error")
 
         every {
-            evaluateSubmissionWithAiGateway.execute(pattern, challenge, submission)
+            evaluateSubmissionWithAiGateway.execute(selectedPattern, expectedPattern, challenge, submission)
         } returns Result.failure(error)
 
-        val result = useCase.execute(submission, challenge, pattern)
+        val result = useCase.execute(submission, challenge, selectedPattern, expectedPattern)
 
         Assertions.assertTrue(result.isFailure)
         Assertions.assertEquals(error, result.exceptionOrNull())
         verify {
-            evaluateSubmissionWithAiGateway.execute(pattern, challenge, submission)
+            evaluateSubmissionWithAiGateway.execute(selectedPattern, expectedPattern, challenge, submission)
         }
     }
 
     @Test
     fun `should propagate store evaluation gateway error`() {
+        val expectedPatternId = UUID.randomUUID()
+
         val submission = Submission(
             id = UUID.randomUUID(),
             challengeId = UUID.randomUUID(),
@@ -150,18 +170,25 @@ class StoreEvaluationUseCaseTest {
 
         val challenge = Challenge(
             id = submission.challengeId,
-            expectedPatternId = submission.patternId,
+            expectedPatternId = expectedPatternId,
             title = "Challenge",
             description = "Description",
             createdAt = LocalDateTime.now(),
             publishedAt = LocalDateTime.now()
         )
 
-        val pattern = DesignPattern(
+        val selectedPattern = DesignPattern(
             id = submission.patternId,
             name = "Strategy",
             category = "Behavioral",
             description = "Strategy pattern description"
+        )
+
+        val expectedPattern = DesignPattern(
+            id = expectedPatternId,
+            name = "Observer",
+            category = "Behavioral",
+            description = "Observer pattern description"
         )
 
         val aiEvaluation = AiEvaluationDto(
@@ -174,19 +201,19 @@ class StoreEvaluationUseCaseTest {
         val error = RuntimeException("Storage error")
 
         every {
-            evaluateSubmissionWithAiGateway.execute(pattern, challenge, submission)
+            evaluateSubmissionWithAiGateway.execute(selectedPattern, expectedPattern, challenge, submission)
         } returns Result.success(aiEvaluation)
 
         every {
             storeEvaluationGateway.execute(any())
         } returns Result.failure(error)
 
-        val result = useCase.execute(submission, challenge, pattern)
+        val result = useCase.execute(submission, challenge, selectedPattern, expectedPattern)
 
         Assertions.assertTrue(result.isFailure)
         Assertions.assertEquals(error, result.exceptionOrNull())
         verify {
-            evaluateSubmissionWithAiGateway.execute(pattern, challenge, submission)
+            evaluateSubmissionWithAiGateway.execute(selectedPattern, expectedPattern, challenge, submission)
             storeEvaluationGateway.execute(any())
         }
     }

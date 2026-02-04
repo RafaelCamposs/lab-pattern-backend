@@ -39,6 +39,8 @@ class StoreSubmissionUseCaseTest {
 
     @Test
     fun `should store submission successfully`() {
+        val expectedPatternId = UUID.randomUUID()
+
         val dto = StoreSubmissionDto(
             challengeId = UUID.randomUUID(),
             patternId = UUID.randomUUID(),
@@ -49,18 +51,25 @@ class StoreSubmissionUseCaseTest {
 
         val challenge = Challenge(
             id = dto.challengeId,
-            expectedPatternId = dto.patternId,
+            expectedPatternId = expectedPatternId,
             title = "Challenge",
             description = "Description",
             createdAt = LocalDateTime.now(),
             publishedAt = LocalDateTime.now()
         )
 
-        val pattern = DesignPattern(
+        val selectedPattern = DesignPattern(
             id = dto.patternId,
-            name = "Pattern",
-            category = "Category",
-            description = "Description"
+            name = "Strategy",
+            category = "Behavioral",
+            description = "Strategy pattern description"
+        )
+
+        val expectedPattern = DesignPattern(
+            id = expectedPatternId,
+            name = "Observer",
+            category = "Behavioral",
+            description = "Observer pattern description"
         )
 
         val user = User(
@@ -95,9 +104,10 @@ class StoreSubmissionUseCaseTest {
 
         every { getChallengeByIdGateway.execute(dto.challengeId) } returns Result.success(challenge)
         every { getUserByIdGateway.execute(dto.userId) } returns Result.success(user)
-        every { getPatternByIdGateway.execute(dto.patternId) } returns Result.success(pattern)
+        every { getPatternByIdGateway.execute(dto.patternId) } returns Result.success(selectedPattern)
+        every { getPatternByIdGateway.execute(expectedPatternId) } returns Result.success(expectedPattern)
         every { storeSubmissionGateway.execute(dto) } returns Result.success(submission)
-        every { evaluateSubmissionWithAiGateway.execute(submission = any(), challenge = any(), pattern = any()) } returns Result.success(
+        every { evaluateSubmissionWithAiGateway.execute(submission = any(), challenge = any(), selectedPattern = any(), expectedPattern = any()) } returns Result.success(
             com.example.domain.evaluation.entity.dto.AiEvaluationDto(
                 score = 100,
                 feedback = listOf(),
@@ -111,11 +121,14 @@ class StoreSubmissionUseCaseTest {
 
         Assertions.assertTrue(result.isSuccess)
         Assertions.assertEquals(evaluation, result.getOrNull()?.evaluation)
+        Assertions.assertEquals("Strategy", result.getOrNull()?.selectedPatternName)
+        Assertions.assertEquals("Observer", result.getOrNull()?.expectedPatternName)
         verify { getChallengeByIdGateway.execute(dto.challengeId) }
         verify { getUserByIdGateway.execute(dto.userId) }
         verify { getPatternByIdGateway.execute(dto.patternId) }
+        verify { getPatternByIdGateway.execute(expectedPatternId) }
         verify { storeSubmissionGateway.execute(dto) }
-        verify { evaluateSubmissionWithAiGateway.execute(submission = any(), challenge = any(), pattern = any()) }
+        verify { evaluateSubmissionWithAiGateway.execute(submission = any(), challenge = any(), selectedPattern = any(), expectedPattern = any()) }
         verify { storeEvaluationGateway.execute(any()) }
     }
 

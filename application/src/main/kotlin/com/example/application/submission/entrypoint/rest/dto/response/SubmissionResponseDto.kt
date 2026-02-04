@@ -9,7 +9,8 @@ data class SubmissionResponseDto(
     val id: UUID,
     val userId: UUID,
     val challengeId: UUID,
-    val patternId: UUID,
+    val selectedPatternName: String,
+    val expectedPatternName: String,
     val code: String,
     val language: String,
     val submittedAt: LocalDateTime,
@@ -20,10 +21,11 @@ data class SubmissionResponseDto(
             id = submission.id!!,
             userId = submission.userId,
             challengeId = submission.challengeId,
+            selectedPatternName = submission.selectedPatternName!!,
+            expectedPatternName = submission.expectedPatternName!!,
             code = submission.code,
             language = submission.language,
             submittedAt = submission.submittedAt,
-            patternId = submission.patternId,
             evaluation = if (submission.evaluation != null)
                 EvaluationResponseDto.fromDomain(submission.evaluation!!)
             else

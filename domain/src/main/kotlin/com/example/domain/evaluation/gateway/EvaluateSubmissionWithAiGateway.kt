@@ -7,7 +7,8 @@ import com.example.domain.submission.entity.Submission
 
 interface EvaluateSubmissionWithAiGateway {
     fun execute(
-        pattern: DesignPattern,
+        selectedPattern: DesignPattern,
+        expectedPattern: DesignPattern,
         challenge: Challenge,
         submission: Submission
     ): Result<AiEvaluationDto>
