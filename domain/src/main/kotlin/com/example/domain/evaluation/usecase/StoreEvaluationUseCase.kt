@@ -17,13 +17,15 @@ class StoreEvaluationUseCase (
     fun execute(
         submission: Submission,
         challenge: Challenge,
-        pattern: DesignPattern,
+        selectedPattern: DesignPattern,
+        expectedPattern: DesignPattern,
     ): Result<Evaluation> {
         return runCatching {
             val aiEvaluation = evaluateSubmissionWithAiGateway.execute(
-                submission = submission,
+                selectedPattern = selectedPattern,
+                expectedPattern = expectedPattern,
                 challenge = challenge,
-                pattern = pattern,
+                submission = submission,
             ).getOrThrow()
 
             val storeEvaluationDto = StoreEvaluationDto(

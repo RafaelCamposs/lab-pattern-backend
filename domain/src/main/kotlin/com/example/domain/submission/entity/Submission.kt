@@ -13,4 +13,6 @@ data class Submission(
     val language: String,
     val submittedAt: LocalDateTime,
     val evaluation: Evaluation? = null,
+    val selectedPatternName: String? = null,
+    val expectedPatternName: String? = null,
 )

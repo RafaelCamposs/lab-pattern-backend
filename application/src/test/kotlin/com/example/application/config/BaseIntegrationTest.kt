@@ -93,7 +93,7 @@ abstract class BaseIntegrationTest {
         @Primary
         fun mockGetOpenAiSubmissionEvaluationService(): GetOpenAiSubmissionEvaluationService {
             val mock = mockk<GetOpenAiSubmissionEvaluationService>()
-            every { mock.execute(any(), any(), any()) } returns Result.success(
+            every { mock.execute(any(), any(), any(), any()) } returns Result.success(
                 AiEvaluationDto(
                     score = 85,
                     feedback = listOf("Good implementation of the design pattern"),
